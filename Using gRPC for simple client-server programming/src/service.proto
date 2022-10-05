@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+message TextRev {
+    string text = 1;
+}
+
+message TextSplitReq {
+    string text = 1;
+    string delim = 2;
+}
+
+message TextSplitRep {
+    uint32 number = 1;
+    repeated string text = 2;
+}
+
+message Number {
+    uint32 value = 1;
+}
+
+message Answer {
+    bool value = 1;
+}
+
+service  CommandExecutor {
+    rpc ReverseText(TextRev) returns (TextRev) {}
+    rpc SplitText(TextSplitReq) returns (TextSplitRep) {}
+    rpc IsPrime(Number) returns (Answer) {}
+}
