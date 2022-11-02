@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+message Address {
+    string address = 1;
+}
+
+message IdReply {
+    int32 id = 1;
+    string m_message = 2;
+}
+
+message Id {
+    uint32 id = 1;
+}
+
+message Ids {
+    string predecessor_address = 1;
+    repeated uint32 required_ids = 2;
+}
+
+message BoolReply {
+    bool status = 1;
+    string id_message = 2;
+}
+
+message NodeInfo {
+    uint32 id = 1;
+    string address = 2;
+}
+
+message FingerTable {
+    repeated NodeInfo table = 1;
+}
+
+message PopFingTableRep {
+    NodeInfo predecessor = 1;
+    FingerTable table = 2;
+}
+
+message Empty {
+
+}
+
+message ServerType {
+    string type = 1;
+    uint32 id = 2;
+}
+
+service Registry {
+    rpc register(Address) returns (IdReply) {}
+    rpc deregister(Id) returns (BoolReply) {}
+    rpc populate_finger_table(Id) returns (PopFingTableRep) {}
+    rpc get_chord_info(Empty) returns (FingerTable) {}
+    rpc get_ack(Empty) returns (ServerType) {}
+}
+
+message Data {
+    string key = 1;
+    string text = 2;
+}
+
+message Key {
+    string key = 1;
+}
+
+service Node {
+    rpc get_finger_table(Empty) returns (FingerTable) {}
+
+    rpc save(Data) returns (BoolReply) {}
+    rpc remove(Key) returns (BoolReply) {}
+    rpc find(Key) returns (BoolReply) {}
+    
+    rpc save_to_pred(Ids) returns (Empty) {}
+
+    rpc get_ack(Empty) returns (ServerType) {}
+}
