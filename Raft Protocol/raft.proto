@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+message Vote {
+    uint32 term = 1;
+    uint32 candidate_id = 2;
+}
+
+message Bulletin {
+    uint32 term = 2;
+    bool vote = 1;
+}
+
+message Systole {
+    uint32 term = 1;
+    uint32 leader_id = 2;
+}
+
+message Diastole {
+    uint32 term = 1;
+    bool success = 2;
+}
+
+message ServerInfo {
+    uint32 id = 1;
+    string address = 2;
+}
+
+message Period {
+    float period = 1;
+}
+
+message Empty {
+
+}
+
+service Raft {
+    rpc request_vote(Vote) returns (Bulletin) {}
+    rpc append_entries(Systole) returns (Diastole) {}
+    rpc get_leader(Empty) returns (ServerInfo) {}
+    rpc suspend(Period) returns (Empty) {}
+}
